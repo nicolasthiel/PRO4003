@@ -365,6 +365,11 @@ end
 MEMBRANE_POTENTIAL  = Vsave;
 TIME_VECTOR         = 0:dt:tmax;
 
+CONCENTRATION = calcium_concentration(MEMBRANE_POTENTIAL(:,end), 30);
+figure;
+plot(CONCENTRATION);
+
+
 % Save the output.
 if ~isempty(filename)
     save(filename, 'TIME_VECTOR', 'MEMBRANE_POTENTIAL', 'INTERNODE_LENGTH', 'par')

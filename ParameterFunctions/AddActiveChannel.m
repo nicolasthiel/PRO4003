@@ -26,10 +26,15 @@ end
 % If supplied `activeChannel' is a structure, attempt to put it in the
 % main `par' structure. Otherwise, we expect it to be a filevname string.
 if isstruct(activeChannel)
-    
     par.node.elec.act(idx) =                                activeChannel;
-    par.node.elec.act(idx).cond.value.vec =                 par.node.elec.act(idx).cond.value.ref * ones(par.geo.nnode, par.geo.nnodeseg);
-    
+    if strcmp(activeChannel.channames, 'Calcium')
+        disp('Yo wir sind tatsächlich drinnen');
+        node_vec = zeros(par.geo.nnode, par.geo.nnodeseg);
+        node_vec(end,:) = 1;
+        par.node.elec.act(idx).cond.value.vec =                 par.node.elec.act(idx).cond.value.ref * node_vec;
+    else
+        par.node.elec.act(idx).cond.value.vec =                 par.node.elec.act(idx).cond.value.ref * ones(par.geo.nnode, par.geo.nnodeseg);
+    end
 elseif ischar(activeChannel)
     
     fileContents =                                          load(activeChannel);
@@ -37,5 +42,13 @@ elseif ischar(activeChannel)
         error('There is no `activeChannel'' variable in this file');
     end
     par.node.elec.act(idx) =                                fileContents.activeChannel;
-    par.node.elec.act(idx).cond.value.vec =                 par.node.elec.act(idx).cond.value.ref * ones(par.geo.nnode, par.geo.nnodeseg);
+    disp(fileContents.activeChannel.channames)
+    if strcmp(fileContents.activeChannel.channames, 'Calcium')
+        disp('Yo wir sind tatsächlich drinnen');
+        node_vec = zeros(par.geo.nnode, par.geo.nnodeseg);
+        node_vec(end,:) = 1;
+        par.node.elec.act(idx).cond.value.vec =                 par.node.elec.act(idx).cond.value.ref * node_vec;
+    else
+        par.node.elec.act(idx).cond.value.vec =                 par.node.elec.act(idx).cond.value.ref * ones(par.geo.nnode, par.geo.nnodeseg);
+    end
 end
