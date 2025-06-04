@@ -329,6 +329,7 @@ for i = 1 : T
         for k = 1 : par.node.elec.act(j).gates.number
             tempprod = tempprod .* (gates{j}{k} .^ numgates(j,k));
         end
+        
         activesum = activesum + actcond{j} .* tempprod / 2;
         activesum2 = activesum2 + actcond{j} .* tempprod * erevval(j);
     end
@@ -364,6 +365,14 @@ end
 
 MEMBRANE_POTENTIAL  = Vsave;
 TIME_VECTOR         = 0:dt:tmax;
+
+CURRENT = calcium_current(MEMBRANE_POTENTIAL(:,end), 30);
+figure;
+plot(CURRENT);
+
+CONCENTRATION = calcium_concentration(CURRENT, 1, 1);
+figure;
+plot(CONCENTRATION);
 
 
 % Save the output.

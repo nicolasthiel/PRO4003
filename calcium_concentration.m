@@ -1,13 +1,11 @@
-function concentration = calcium_concentration(V_m, r)
+function concentration = calcium_concentration(current, X0, tau_X)
+    
+    t_end = length(current);
 
-% constants
-E_rev = 0.043; % V
-gamma = 2.76; % pS
-F = 96485.33; % C/mol
-D = 220; % μm^2/s
+    tspan = 1:1:t_end;  % Start and end time
 
+    dXdt = @(t, X) -current(int32(t)) - (X - X0)/(tau_X);
 
-concentration = (E_rev - V_m).*gamma./(4.*pi.*F.*D.*r);
-
+    opts = odeset('RelTol', 1e-6, 'AbsTol', 1e-8);
+    [~, concentration] = ode45(dXdt, tspan, X0, opts);
 end
-

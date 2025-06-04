@@ -284,6 +284,19 @@ Vsave                                       = nan(T+1, nns*nnodes);
 Vsave(1, :)                                 = V1(nodes);
 
 
+
+% Initialize conductance and current storage for each active ion channel
+numChannels = length(par.node.elec.act);
+g_ion = cell(1, numChannels);
+I_ion = cell(1, numChannels);
+for j = 1:numChannels
+    g_ion{j} = zeros(T, nns * nnodes);  % conductance
+    I_ion{j} = zeros(T, nns * nnodes);  % current
+end
+
+
+
+
 if isVerbose
     updatemessage = (0:0.05:1);
     printmessage = round(T * updatemessage);
@@ -329,6 +342,12 @@ for i = 1 : T
         for k = 1 : par.node.elec.act(j).gates.number
             tempprod = tempprod .* (gates{j}{k} .^ numgates(j,k));
         end
+        
+        % Ion channel conducatance
+        g_current = actcond{j} .* tempprod;
+        g_ion{j}(i,:) = g_current';  % row vector
+        I_ion{j}(i,:) = (g_current .* (V2(nodes+1,2) - erevval(j)))';
+
         activesum = activesum + actcond{j} .* tempprod / 2;
         activesum2 = activesum2 + actcond{j} .* tempprod * erevval(j);
     end
@@ -365,7 +384,11 @@ end
 MEMBRANE_POTENTIAL  = Vsave;
 TIME_VECTOR         = 0:dt:tmax;
 
-CONCENTRATION = calcium_concentration(MEMBRANE_POTENTIAL(:,end), 30);
+CALCIUM_CURRENT = I_ion{1,4};
+figure;
+plot(CALCIUM_CURRENT(:,end));
+
+CONCENTRATION = calcium_concentration(CALCIUM_CURRENT(:,end), 0.1, 80);
 figure;
 plot(CONCENTRATION);
 
