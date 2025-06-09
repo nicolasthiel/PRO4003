@@ -303,6 +303,16 @@ if isVerbose
     fprintf('Running...  0%% complete'); tic;
 end
 
+Faraday = 96485.3321;
+Fz = 1 / (2000 * Faraday);
+
+
+last_node_radius = par.node.seg.geo.diam.value.vec(end) / 2;
+last_node_length = par.node.seg.geo.length.value.vec(end);
+
+last_node_surface = 2 * pi * last_node_radius * last_node_length * 1e-8;
+last_node_volume = pi * last_node_radius * last_node_radius * last_node_length * 1e-12;
+
 
 % ---------------------------- MAIN ----------------------------------- %
 
@@ -345,7 +355,6 @@ for i = 1 : T
         
         % Ion channel conducatance
         g_current = actcond{j} .* tempprod;
-        g_ion{j}(i,:) = g_current';  % row vector
         I_ion{j}(i,:) = (g_current .* (V2(nodes+1,2) - erevval(j)))';
 
         activesum = activesum + actcond{j} .* tempprod / 2;
@@ -384,11 +393,13 @@ end
 MEMBRANE_POTENTIAL  = Vsave;
 TIME_VECTOR         = 0:dt:tmax;
 
-CALCIUM_CURRENT = I_ion{1,4};
+temp_current = I_ion{1,3} * last_node_surface / last_node_volume;
+
+CALCIUM_CURRENT = temp_current * Fz * 1000;
 figure;
 plot(CALCIUM_CURRENT(:,end));
 
-CONCENTRATION = calcium_concentration(CALCIUM_CURRENT(:,end), 0.1, 80);
+CONCENTRATION = calcium_concentration(CALCIUM_CURRENT(:,end), 100*1e-6, 80);
 figure;
 plot(CONCENTRATION);
 

@@ -7,6 +7,4 @@ function Project()
     if ~isdir(saveDirectory)
         mkdir(saveDirectory)
     end
-
-    
 end

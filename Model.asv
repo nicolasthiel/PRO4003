@@ -284,11 +284,27 @@ Vsave                                       = nan(T+1, nns*nnodes);
 Vsave(1, :)                                 = V1(nodes);
 
 
+
+% Initialize conductance and current storage for each active ion channel
+numChannels = length(par.node.elec.act);
+g_ion = cell(1, numChannels);
+I_ion = cell(1, numChannels);
+for j = 1:numChannels
+    g_ion{j} = zeros(T, nns * nnodes);  % conductance
+    I_ion{j} = zeros(T, nns * nnodes);  % current
+end
+
+
+
+
 if isVerbose
     updatemessage = (0:0.05:1);
     printmessage = round(T * updatemessage);
     fprintf('Running...  0%% complete'); tic;
 end
+
+Faraday = 96485.3321;
+Fz = 1 / (2000 * Faraday);
 
 
 % ---------------------------- MAIN ----------------------------------- %
@@ -330,6 +346,10 @@ for i = 1 : T
             tempprod = tempprod .* (gates{j}{k} .^ numgates(j,k));
         end
         
+        % Ion channel conducatance
+        g_current = actcond{j} .* tempprod;
+        I_ion{j}(i,:) = (g_current .* (V2(nodes+1,2) - erevval(j)))';
+
         activesum = activesum + actcond{j} .* tempprod / 2;
         activesum2 = activesum2 + actcond{j} .* tempprod * erevval(j);
     end
@@ -366,11 +386,17 @@ end
 MEMBRANE_POTENTIAL  = Vsave;
 TIME_VECTOR         = 0:dt:tmax;
 
-CURRENT = calcium_current(MEMBRANE_POTENTIAL(:,end), 30);
-figure;
-plot(CURRENT);
+last_node_radius = par.node.seg.geo.diam.value.vec(end) / 2;
+last_node_length = par.node.seg.geo.length.value.vec(end);
 
-CONCENTRATION = calcium_concentration(CURRENT, 1, 1);
+last_node_surface = 2 * pi * last_node_radius * last_node_length * 1e-8;
+last_node_volume = pi * last_node_radius * last_node_radius * last_node_length * 1e-12;
+
+CALCIUM_CURRENT = I_ion{1,4} *;
+figure;
+plot(CALCIUM_CURRENT(:,end));
+
+CONCENTRATION = calcium_concentration(CALCIUM_CURRENT(:,end), 0.1, 80);
 figure;
 plot(CONCENTRATION);
 
