@@ -395,7 +395,7 @@ TIME_VECTOR         = 0:dt:tmax;
 
 temp_current = I_ion{1,3} * last_node_surface / last_node_volume;
 CALCIUM_CURRENT = temp_current * Fz * 1000;
-CALCIUM_CONCENTRATION = calcium_concentration(CALCIUM_CURRENT(:,end), 100*1e-6, 80);
+CALCIUM_CONCENTRATION = calcium_concentration(CALCIUM_CURRENT(:,end), 100*1e-6, 80).*1000; % to micromolar
 
 % Save the output.
 if ~isempty(filename)
