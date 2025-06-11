@@ -3,9 +3,76 @@ clearvars; clc;
 fprintf('---------------------------------------------------------\n');
 fprintf('----------------------- PRO4003 -------------------------\n\n');
 
-runEXPERIMENT1 = true;
+runExperiment1 = true;
+runExperiment2 = true;
+runExperiment3 = true;
 
-axon = PRO4003B2();
-% adjust axon here
-fprintf('Running model');
-[MEMBRANE_POTENTIAL, INTERNODE_LENGTH, TIME_VECTOR, CALCIUM_CURRENT, CALCIUM_CONCENTRATION] = Model(axon);
+
+% Experiment 1 - gratio
+if runExperiment1
+    fprintf('Running experiment 1\n');
+    axon = PRO4003B2();
+    param_values = 0.4:0.05:0.9;
+    experiment1 = cell(length(param_values),1);
+    for i=1:length(param_values)
+        axon.myel.geo.gratio.value.ref = param_values(i);
+        axon.myel.geo.gratio.value.vec_ref = axon.myel.geo.gratio.value.ref * ones(axon.geo.nintn, axon.geo.nintseg);
+        axon = CalculateNumberOfMyelinLamellae(axon);
+        [MEMBRANE_POTENTIAL, INTERNODE_LENGTH, TIME_VECTOR, CALCIUM_CURRENT, CALCIUM_CONCENTRATION] = Model(axon);
+        experiment.name = 'axon.myel.geo.gratio';
+        experiment.axon = axon;
+        experiment.MEMBRANE_POTENTIAL = MEMBRANE_POTENTIAL;
+        experiment.INTERNODE_LENGTH = INTERNODE_LENGTH;
+        experiment.TIME_VECTOR = TIME_VECTOR;
+        experiment.CALCIUM_CURRENT = CALCIUM_CURRENT;
+        experiment.CALCIUM_CONCENTRATION = CALCIUM_CONCENTRATION;
+        experiment1{i,1} = experiment; 
+    end
+    save('data/experiment1.mat', "experiment1");
+end
+
+
+% Experiment 2 - periaxonal space width
+if runExperiment2
+    fprintf('Running experiment 2\n');
+    axon = PRO4003B2();
+    param_values = 0:1:20;
+    experiment2 = cell(length(param_values),1);
+    for i=1:length(param_values)
+        axon = UpdateInternodePeriaxonalSpaceWidth(axon, param_values(i))
+        [MEMBRANE_POTENTIAL, INTERNODE_LENGTH, TIME_VECTOR, CALCIUM_CURRENT, CALCIUM_CONCENTRATION] = Model(axon);
+        experiment.name = 'axon.myel.geo.peri';
+        experiment.axon = axon;
+        experiment.MEMBRANE_POTENTIAL = MEMBRANE_POTENTIAL;
+        experiment.INTERNODE_LENGTH = INTERNODE_LENGTH;
+        experiment.TIME_VECTOR = TIME_VECTOR;
+        experiment.CALCIUM_CURRENT = CALCIUM_CURRENT;
+        experiment.CALCIUM_CONCENTRATION = CALCIUM_CONCENTRATION;
+        experiment2{i,1} = experiment;
+    end
+    save('data/experiment2.mat', "experiment2");
+end
+
+
+% Experiment 3 - axon diameter
+if runExperiment2
+    fprintf('Running experiment 3\n');
+    axon = PRO4003B2();
+    param_values = 0:1:20;
+    experiment2 = cell(length(param_values),1);
+    for i=1:length(param_values)
+        axon.myel.geo.peri.value.ref = 0;
+        axon.myel.geo.peri.value.vec = axon.myel.geo.peri.value.ref * ones(axon.geo.nintn,axon.geo.nintseg);
+        axon = CalculateNumberOfMyelinLamellae(axon);
+        [MEMBRANE_POTENTIAL, INTERNODE_LENGTH, TIME_VECTOR, CALCIUM_CURRENT, CALCIUM_CONCENTRATION] = Model(axon);
+        experiment.name = 'axon.myel.geo.peri';
+        experiment.axon = axon;
+        experiment.MEMBRANE_POTENTIAL = MEMBRANE_POTENTIAL;
+        experiment.INTERNODE_LENGTH = INTERNODE_LENGTH;
+        experiment.TIME_VECTOR = TIME_VECTOR;
+        experiment.CALCIUM_CURRENT = CALCIUM_CURRENT;
+        experiment.CALCIUM_CONCENTRATION = CALCIUM_CONCENTRATION;
+        experiment2{i,1} = experiment;
+    end
+    save('data/experiment2.mat', "experiment2");
+end

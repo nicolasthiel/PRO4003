@@ -85,6 +85,7 @@ end
 
 idx = sub2ind(size(par.myel.geo.gratio.value.vec_ref), internodeIdx2, segmentIdx2);
 par.myel.geo.gratio.value.vec_ref(idx) = value;
+par.myel.geo.gratio.value.ref = value(1);
 
 % Must update the myelin parameters.
 par = CalculateNumberOfMyelinLamellae(par, myelinUpdate);
