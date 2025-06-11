@@ -1,9 +1,9 @@
 % Add path of Vesicle Model
 addpath("../SytSim_Matlab/");
 
-num_experiments = 2;
+num_experiments = 3;
 
-run_experiment = {true, false};
+run_experiment = {true, true, true};
 
 threshold_calcium_concentraion = 1e-4;
 
