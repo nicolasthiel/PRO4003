@@ -3,7 +3,7 @@ addpath("../SytSim_Matlab/");
 
 num_experiments = 2;
 
-run_experiment = {true, true};
+run_experiment = {true, false};
 
 threshold_calcium_concentraion = 1e-4;
 
