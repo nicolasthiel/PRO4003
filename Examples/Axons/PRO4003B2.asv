@@ -7,7 +7,7 @@ par =                                                                   Generate
 par.sim.temp =                                                          37;
 par.sim.dt.value =                                                      1;
 par.sim.dt.units =                                                      {1, 'us', 1};
-par.sim.tmax.value =                                                    8;
+par.sim.tmax.value =                                                    6;
 par.sim.tmax.units =                                                    {1, 'ms', 1};
 
 % Current stimulation
@@ -23,7 +23,7 @@ par.geo.nnode =                                                         201;
 % Number of internodes.
 par.geo.nintn =                                                         par.geo.nnode - 1;
 % Number of segments per node.
-par.geo.nnodeseg =                                                      50;
+par.geo.nnodeseg =                                                      10;
 % Number of segments per internode.
 par.geo.nintseg =                                                       15;
 

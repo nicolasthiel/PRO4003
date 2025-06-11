@@ -307,8 +307,8 @@ Faraday = 96485.3321;
 Fz = 1 / (2 * Faraday);
 
 
-last_node_radius = par.node.seg.geo.diam.value.vec(end) / 2;
-last_node_length = par.node.seg.geo.length.value.vec(end);
+last_node_radius = par.node.seg.geo.diam.value.ref / 2;
+last_node_length = par.node.seg.geo.length.value.ref;
 
 last_node_surface = 2 * pi * last_node_radius * last_node_length * 1e-6;
 last_node_volume = pi * last_node_radius * last_node_radius * last_node_length * 1e-15;
@@ -393,7 +393,9 @@ end
 MEMBRANE_POTENTIAL  = Vsave;
 TIME_VECTOR         = 0:dt:tmax;
 
-temp_current = I_ion{1,3} * last_node_surface / last_node_volume;
+temp_I_ion = I_ion{1,3};
+last_node_I_ion = sum(temp_I_ion(:,end-nns:end),2);
+temp_current = last_node_I_ion * last_node_surface / last_node_volume;
 CALCIUM_CURRENT = temp_current * Fz;
 CALCIUM_CONCENTRATION = calcium_concentration(CALCIUM_CURRENT(:,end), 100*1e-6, 80) .* 1000; % to micromolar
 
