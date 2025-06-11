@@ -1,7 +1,7 @@
 function activeChannel = Ford2015Calcium()
 
 activeChannel.channames =                           'Calcium';
-activeChannel.cond.value.ref =                      3;
+activeChannel.cond.value.ref =                      300;
 activeChannel.cond.value.vec =                      [];
 activeChannel.cond.units =                          {2, 'mS', 'cm', [1, -2]};
 activeChannel.erev.value =                          43.5;

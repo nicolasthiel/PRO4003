@@ -304,14 +304,14 @@ if isVerbose
 end
 
 Faraday = 96485.3321;
-Fz = 1 / (2000 * Faraday);
+Fz = 1 / (2 * Faraday);
 
 
 last_node_radius = par.node.seg.geo.diam.value.vec(end) / 2;
 last_node_length = par.node.seg.geo.length.value.vec(end);
 
-last_node_surface = 2 * pi * last_node_radius * last_node_length * 1e-8;
-last_node_volume = pi * last_node_radius * last_node_radius * last_node_length * 1e-12;
+last_node_surface = 2 * pi * last_node_radius * last_node_length * 1e-6;
+last_node_volume = pi * last_node_radius * last_node_radius * last_node_length * 1e-15;
 
 
 % ---------------------------- MAIN ----------------------------------- %
@@ -355,7 +355,7 @@ for i = 1 : T
         
         % Ion channel conducatance
         g_current = actcond{j} .* tempprod;
-        I_ion{j}(i,:) = (g_current .* (V2(nodes+1,2) - erevval(j)))';
+        I_ion{j}(i,:) = 1e-3 .* (g_current .* (1e-3 * (V2(nodes+1,2) - erevval(j))))';
 
         activesum = activesum + actcond{j} .* tempprod / 2;
         activesum2 = activesum2 + actcond{j} .* tempprod * erevval(j);
@@ -394,8 +394,8 @@ MEMBRANE_POTENTIAL  = Vsave;
 TIME_VECTOR         = 0:dt:tmax;
 
 temp_current = I_ion{1,3} * last_node_surface / last_node_volume;
-CALCIUM_CURRENT = temp_current * Fz * 1000;
-CALCIUM_CONCENTRATION = calcium_concentration(CALCIUM_CURRENT(:,end), 100*1e-6, 80).*1000; % to micromolar
+CALCIUM_CURRENT = temp_current * Fz;
+CALCIUM_CONCENTRATION = calcium_concentration(CALCIUM_CURRENT(:,end), 100*1e-6, 80) .* 1000; % to micromolar
 
 % Save the output.
 if ~isempty(filename)
