@@ -33,6 +33,8 @@ function plotVesicleRelease(data, iteration)
         yyaxis right;
         stairs(vesicle_plot_x, vesicle_plot_y, 'LineWidth', 1)
         ylabel('Total vesicles released');
+        ylim([-0.1, length(vesicle_release_times_scaled)+1])
+        hold on;
         hold off;
         title([data.name ' = ' num2str(data.value)]);
         xlabel('Time (ms)');
