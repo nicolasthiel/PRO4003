@@ -4,10 +4,10 @@ fprintf('---------------------------------------------------------\n');
 fprintf('----------------------- PRO4003 -------------------------\n\n');
 
 runExperiment1 = false;
-runExperiment2 = false;
+runExperiment2 = true;
 runExperiment3 = true;
-runExperiment4 = false;
-runExperiment5 = false;
+runExperiment4 = true;
+runExperiment5 = true;
 
 
 % Experiment 1 - gratio
@@ -78,12 +78,12 @@ if runExperiment2
         ylim([-100, 100]);
         xlabel('Time, ms')
         ylabel('Membrane potential, mV')
-        title([experiment.name ' = ' num2str(experiment.value)])
+        title([experiment.name ' = ' num2str(experiment.value) 'nm'])
         saveas(fig, sprintf("plots/experiment2-%d.png", i))
     end
     fig = figure;
     for i=1:length(temp_mV)
-        plot(TIME_VECTOR', temp_mV{i}, DisplayName=num2str(param_values(i)));
+        plot(TIME_VECTOR', temp_mV{i}, DisplayName=[num2str(param_values(i)) 'nm']);
         hold on;
     end
     hold off;
@@ -122,12 +122,12 @@ if runExperiment3
         ylim([-100, 100]);
         xlabel('Time, ms')
         ylabel('Membrane potential, mV')
-        title([experiment.name ' = ' num2str(experiment.value)])
+        title([experiment.name ' = ' num2str(experiment.value) 'nm'])
         saveas(fig, sprintf("plots/experiment3-%d.png", i))
     end
     fig = figure;
     for i=1:length(temp_mV)
-        plot(TIME_VECTOR', temp_mV{i}, DisplayName=num2str(param_values(i)));
+        plot(TIME_VECTOR', temp_mV{i}, DisplayName=[num2str(param_values(i)) 'nm']);
         hold on;
     end
     hold off;
@@ -151,7 +151,7 @@ if runExperiment4
     for i=1:length(param_values)
         axon = UpdateInternodeSegmentDiameter(axon, param_values(i));
         [MEMBRANE_POTENTIAL, INTERNODE_LENGTH, TIME_VECTOR, CALCIUM_CURRENT, CALCIUM_CONCENTRATION] = Model(axon);
-        experiment.name = 'Internode Segment Diameter';
+        experiment.name = 'Internode Diameter';
         experiment.value = param_values(i);
         experiment.TIME_VECTOR = TIME_VECTOR;
         experiment.CALCIUM_CURRENT = CALCIUM_CURRENT(:,end);
@@ -165,12 +165,12 @@ if runExperiment4
         ylim([-100, 100]);
         xlabel('Time, ms')
         ylabel('Membrane potential, mV')
-        title([experiment.name ' = ' num2str(experiment.value)])
+        title([experiment.name ' = ' num2str(experiment.value) 'um'])
         saveas(fig, sprintf("plots/experiment4-%d.png", i))
     end
     fig = figure;
     for i=1:length(temp_mV)
-        plot(TIME_VECTOR', temp_mV{i}, DisplayName=num2str(param_values(i)));
+        plot(TIME_VECTOR', temp_mV{i}, DisplayName=[num2str(param_values(i)) 'um']);
         hold on;
     end
     hold off;
@@ -178,7 +178,7 @@ if runExperiment4
     xlabel('Time, ms')
     ylabel('Membrane potential, mV')
     legend('Location','northeastoutside', 'Orientation','vertical')
-    title('AP at Last Node for Internode Segment Diameter')
+    title('AP at Last Node for Internode Diameter')
     saveas(fig, 'plots/experiment4-final.png')
 
     save('data/experiment4.mat', "experiment4");
@@ -208,12 +208,12 @@ if runExperiment5
         ylim([-100, 100]);
         xlabel('Time, ms')
         ylabel('Membrane potential, mV')
-        title([experiment.name ' = ' num2str(experiment.value)])
+        title([experiment.name ' = ' num2str(experiment.value) 'um'])
         saveas(fig, sprintf("plots/experiment5-%d.png", i))
     end
     fig = figure;
     for i=1:length(temp_mV)
-        plot(TIME_VECTOR', temp_mV{i}, DisplayName=num2str(param_values(i)));
+        plot(TIME_VECTOR', temp_mV{i}, DisplayName=[num2str(param_values(i)) 'um']);
         hold on;
     end
     hold off;
