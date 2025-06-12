@@ -3,11 +3,11 @@ clearvars; clc;
 fprintf('---------------------------------------------------------\n');
 fprintf('----------------------- PRO4003 -------------------------\n\n');
 
-runExperiment1 = true;
-runExperiment2 = true;
+runExperiment1 = false;
+runExperiment2 = false;
 runExperiment3 = true;
-runExperiment4 = true;
-runExperiment5 = true;
+runExperiment4 = false;
+runExperiment5 = false;
 
 
 % Experiment 1 - gratio
@@ -102,7 +102,7 @@ end
 if runExperiment3
     fprintf('Running experiment 3\n');
     axon = PRO4003B2();
-    param_values = 15:0.2:17; %17
+    param_values = 15:0.5:17; %17
     experiment3 = cell(length(param_values),1);
     temp_mV = cell(length(param_values),1);
     for i=1:length(param_values)
