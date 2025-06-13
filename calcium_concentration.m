@@ -8,4 +8,5 @@ function concentration = calcium_concentration(current, X0, tau_X)
 
     opts = odeset('RelTol', 1e-6, 'AbsTol', 1e-8);
     [~, concentration] = ode45(dXdt, tspan, X0, opts);
+    concentration = [X0; concentration];
 end

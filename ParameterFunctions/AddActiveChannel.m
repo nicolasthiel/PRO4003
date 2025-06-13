@@ -28,7 +28,7 @@ end
 if isstruct(activeChannel)
     par.node.elec.act(idx) =                                activeChannel;
     if strcmp(activeChannel.channames, 'Calcium')
-        disp('Yo wir sind tatsächlich drinnen');
+        %disp('Yo wir sind tatsächlich drinnen');
         node_vec = zeros(par.geo.nnode, par.geo.nnodeseg);
         node_vec(end,:) = 1;
         par.node.elec.act(idx).cond.value.vec =                 par.node.elec.act(idx).cond.value.ref * node_vec;
@@ -42,9 +42,9 @@ elseif ischar(activeChannel)
         error('There is no `activeChannel'' variable in this file');
     end
     par.node.elec.act(idx) =                                fileContents.activeChannel;
-    disp(fileContents.activeChannel.channames)
+    %disp(fileContents.activeChannel.channames)
     if strcmp(fileContents.activeChannel.channames, 'Calcium')
-        disp('Yo wir sind tatsächlich drinnen');
+        %disp('Yo wir sind tatsächlich drinnen');
         node_vec = zeros(par.geo.nnode, par.geo.nnodeseg);
         node_vec(end,:) = 1;
         par.node.elec.act(idx).cond.value.vec =                 par.node.elec.act(idx).cond.value.ref * node_vec;

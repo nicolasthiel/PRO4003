@@ -85,6 +85,7 @@ end
 
 idx = sub2ind(size(par.myel.geo.peri.value.vec), internodeIdx2, segmentIdx2);
 par.myel.geo.peri.value.vec(idx) = value;
+par.myel.geo.peri.value.ref = value(1);
 
 % Must update the myelin parameters.
 par = CalculateNumberOfMyelinLamellae(par, myelinUpdate);
